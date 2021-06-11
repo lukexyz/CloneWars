@@ -1,5 +1,5 @@
 import streamlit as st
 
-st.header('Hello 🌎!')
-if st.button('Balloons?'):
+st.header('Digg 9000 🌎!')
+if st.button('Frontpage?'):
     st.balloons()
