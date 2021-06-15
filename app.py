@@ -7,14 +7,13 @@ db = firestore.Client.from_service_account_json("firebase/clonewars-cd499.json")
 
 st.header('Digg 9000 🌎')
 
-if st.button('Frontpage'):
-    # Now let's make a reference to ALL of the posts
-    posts_ref = db.collection("posts")
 
-    # For a reference to a collection, we use .stream() instead of .get()
-    for doc in posts_ref.stream():
-        st.write("The id is: ", doc.id)
-        st.write("The contents are: ", doc.to_dict())
+form = st.form(key='my-form')
+name = form.text_input('Enter your name')
+submit = form.form_submit_button('Submit')
+st.write('Press submit to have your name printed below')
+if submit:
+    st.write(f'hello {name}')
 
 
 if st.button('New Post'):
@@ -52,5 +51,15 @@ if st.button('Search'):
         doc = doc_ref.get()
 
         # Let's see what we got!
+        st.write("The id is: ", doc.id)
+        st.write("The contents are: ", doc.to_dict())
+
+
+if st.button('Fetch db'):
+    # Now let's make a reference to ALL of the posts
+    posts_ref = db.collection("posts")
+
+    # For a reference to a collection, we use .stream() instead of .get()
+    for doc in posts_ref.stream():
         st.write("The id is: ", doc.id)
         st.write("The contents are: ", doc.to_dict())
