@@ -4,30 +4,25 @@ from google.cloud import firestore
 # Authenticate to Firestore with the JSON account key.
 db = firestore.Client.from_service_account_json("firebase/clonewars-cd499.json")
 
-
 st.header('Digg 9000 🌎')
 
+# Submit new post to firestore
+form = st.form(key='new-post-form')
+title = form.text_input("Post title")
+url = form.text_input("Post url")
+submit = form.form_submit_button('Submit new post')
 
-form = st.form(key='my-form')
-name = form.text_input('Enter your name')
-submit = form.form_submit_button('Submit')
-st.write('Press submit to have your name printed below')
 if submit:
-    st.write(f'hello {name}')
+    st.write(f'Submitting: {title}')
 
-
-if st.button('New Post'):
-    title = st.text_input("Post title")
-    url = st.text_input("Post url")
-    submit = st.button(("Submit new post"))
-
-    if title and url and submit:
-        # upload inputs
-        doc_ref = db.collection("posts").document(title)
-        doc_ref.set({
-            "title": title,
-            "url" : url
-            })
+if title and url and submit:
+    # upload inputs
+    st.write(f'Sending to database {url}')
+    doc_ref = db.collection("posts").document(title)
+    doc_ref.set({
+        "title": title,
+        "url" : url
+        })
 
 # And then render each post, using some light Markdown
 posts_ref = db.collection("posts")
@@ -38,7 +33,6 @@ for doc in posts_ref.stream():
 
 	st.subheader(f"Post: {title}")
 	st.write(f":link: [{url}]({url})")
-
 
 if st.button('Search'):
     # Create a reference to the a post (fast)
@@ -53,7 +47,6 @@ if st.button('Search'):
         # Let's see what we got!
         st.write("The id is: ", doc.id)
         st.write("The contents are: ", doc.to_dict())
-
 
 if st.button('Fetch db'):
     # Now let's make a reference to ALL of the posts
